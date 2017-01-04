@@ -1,0 +1,276 @@
+.box_main{ background:#fff; width:1170px; margin:18px auto; padding:10px;}
+
+.box_main .search_button,.box_main .save_button,.box_main .cancle_button {
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    /* border-radius: 0 !important;*/
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: inline-block !important;
+
+    font-size: 14px !important;
+    height: 36px !important;
+    /* line-height: 32px !important;*/
+    margin: 0 10px 0 0 !important;
+    text-align: center !important;
+      min-width: 80px !important;
+}
+
+
+	.box_main  h2{  color: #545454;
+    font-size: 24px;
+    font-weight: normal;
+
+    padding: 0;}
+	
+	.box_main  h2::after {
+    background: #004c92 none repeat scroll 0 0;
+    content: "";
+    display: block;
+    height: 2px;
+    margin: 12px 0;
+    width: 66px;
+}
+
+	.box_main #pixel_main_table{ width:100%; margin-bottom:30px;} 
+	
+		.box_main #pixel_main_table th{ background:#01a1fc; padding:10px; text-align:center; font-size:16px; font-weight:normal; color:#fff; border:solid 1px #fff;}
+		.box_main #pixel_main_table td{ background:#fff; padding:10px 0; text-align:center; font-size:16px; font-weight:normal; color:#545454; border:solid 1px #e6e5e5;}
+		
+		.box_main #pixel_main_table td h4{ font-weight:normal; font-size:16px; color:#004c92;}
+		
+			.box_main #pixel_main_table td img{ display:block; margin:0 auto;width:45px;cursor: pointer;}
+			
+	
+				.box_main #pixel_main_table td .icon_button_16 img{ display:none;}
+				
+					.box_main #pixel_main_table td .icon_button_16 span{ display:block; width:100%; text-align:center;}
+			
+			
+			
+					.box_main #pixel_main_table td .editbtn{  background: #004c92 url("images/editlink.png") no-repeat  14px  center!important; background-size:14px!important;}
+					
+								.box_main #pixel_main_table td .deletebtn{  background: #004c92 url("images/deleteicon.png") no-repeat   8px  center!important; background-size:14px!important;}
+								
+								
+								
+								
+		#video_manager_form legend { font-family:Arial, Helvetica, sans-serif; color:#444;}	
+		
+		#video_manager_form legend a{color:#004c92;}	
+		
+		
+		#video_manager_form fieldset {  margin: 0 auto;
+    padding-bottom: 10px;
+    width: 95% !important;}
+		
+		#video_manager_form dt { font-weight:normal; font-family:Arial, Helvetica, sans-serif; color:#004c92;}
+		
+			#video_manager_form dt  label{ font-weight:normal;}	
+		
+		#video_manager_form input[type="text"]{ width:100%;   border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    box-shadow: none;
+    color: #545454; background:#f0f0f0; height:48px;}
+
+#video_manager_form textarea{ width:100%;   border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    box-shadow: none;
+    color: #545454; background:#f0f0f0; height:88px;}
+	
+		#video_manager_form select{ width:100%;   border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    box-shadow: none;
+    color: #545454; background:#f0f0f0; height:48px;}		
+	
+	
+		#video_manager_form .te_buttons { background:none; border:none; }
+		
+		
+			#video_manager_form .te_buttons .te_buttons {
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: block !important;
+    float: left !important;
+    font-size: 14px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 0 10px 0 0 !important;
+    text-align: center !important;
+    width: 144px !important;
+}
+
+.search_button{
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: block !important;
+
+   /* float: right !important;*/
+
+    font-size: 14px !important;
+    height: 36px !important;
+    /*
+    line-height: 36px !important;
+    margin: 0 10px 0 0 !important;
+    */
+    text-align: center !important;
+    width: 124px !important;
+            }
+	#video_manager_form .te_buttons {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+    border: medium none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+
+.row{ width:100%!important; padding:0!important; margin:0!important}
+
+.col-sm-12{ width:100%!important; padding:0!important; margin:0!important}
+
+.span-one-third { width:100%!important; margin:0!important; padding:0!important;}
+
+.span-one-third h3{ color: #545454;
+    font-size: 24px;
+    font-weight: normal; text-align:center;}
+	
+	
+.span-one-third h3::after {
+    background: #004c92 none repeat scroll 0 0;
+    content: "";
+    display: block;
+    height: 2px;
+    margin: 4px auto;
+    width: 126px;
+	margin-bottom:12px;
+}
+
+
+.te_viewnav_top .te_delete_form{ background:none; border:none; width:274px; margin:20px auto; padding-bottom:10px; }
+		
+		
+
+.te_viewnav_top .te_delete_form .confirm_button {
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: block !important;
+    float: left !important;
+    font-size: 14px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 0 5px  !important;
+    text-align: center !important;
+    width: 126px !important;
+}
+
+
+.te_viewnav_top .te_delete_form .cancel_button {
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: block !important;
+    float: left !important;
+    font-size: 14px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 0 5px  !important;
+    text-align: center !important;
+    width: 126px !important;
+}
+
+
+#te_action_menu_pixel .te_legend{ color: #545454;
+    font-size: 24px;
+    font-weight: normal;}
+	
+	#te_action_menu_pixel { border-bottom:solid 1px #f0f0f0;}
+
+#te_action_menu_pixel .te_new_button{
+    background: #01a1fc none repeat scroll 0 0 !important; color: #fff !important;
+    font-size: 18px !important; display:inline-block; margin-top:-8px; }
+  
+
+	
+	
+.te .to_noresults{ font-size:24px; color:#ff0000!important; padding-top:30px;}
+
+.te_action_menu_pixel td{ line-height:50px;}
+
+.formsearch{display: block;clear: both; float: left;}
+.formsearch input{display: inline-block; float: left;}
+
+.formsearch input[type="text"],
+.formsearch input[type="email"],
+.formsearch input[type="number"],
+.formsearch input[type="password"],
+.formsearch select,
+.formsearch textarea {
+    padding: 8px 5px;
+}
+.search_button{margin-left: 5px;}
+.formsearch input, .formsearch select, .formsearch textarea{margin-right: 5px;}
+#defaultmenu{top:0px;}
+#defaultmenu .navbar-nav > li > a {
+    padding: 17px 13px;
+}
+
+.box_main {
+    width: 100%;
+    padding: 0px;
+}
+
+.box_main #pixel_main_table td{
+    padding: 5px;
+}
+.addbtn button{
+    margin: 0 10px 4px 0 !important;
+}
+
+#value_field_container__file .search_button{
+    float: left !important;
+    display: block;
+}
+
+#video_manager_form dt .status {
+    display: block;
+    clear: both;
+    width: 100%;
+}
+
+.searchmodel iframe{
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.add_video_button {
+    background: #01a1fc none repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    display: block !important;
+    float: right !important;
+    font-size: 14px !important;
+    height: 36px !important;
+    line-height: 28px !important;
+    margin: 10px 10px 10px 0 !important;
+    text-align: center !important;
+    width: 124px !important;
+}
+
+.videowrap{background-color: #000; width: 100px; height: 75px;margin-left:0px;cursor:pointer;}
+.searchmodel button.close{height: 32px !important;width: 32px !important; border-radius: 100%; -webkit-border-radius: 100%;min-width:0px!important; -moz-border-radius: 100%;background-color: #01a1fc; opacity: 1.0;}
+.pop button.close{height: 32px !important;width: 32px !important; border-radius: 100%; -webkit-border-radius: 100%;min-width:0px!important; -moz-border-radius: 100%;background-color: #01a1fc; opacity: 1.0;}

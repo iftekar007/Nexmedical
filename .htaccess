@@ -1,0 +1,18 @@
+# ApogeeINVENT Skeleton v3p2 - j0zf 2009.11.26
+Options  FollowSymLinks
+RewriteEngine On
+RewriteBase /~nexmed/
+
+# [REPLACE]
+# CODE IN THIS [REPLACE] TAG WILL BE REPLACED BY THE HTACCESS VERSIONING FILE (in core/htaccess/version.htaccess.php)
+
+<IfModule mod_rewrite.c>
+        RewriteRule ^(.*/)?.svn/ - [F,L]
+        ErrorDocument 403 "Access Forbidden"
+</IfModule>
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule ^(.*)$ index.php?ai_q=%{REQUEST_URI} [QSA,NE,L]
+
+# [/REPLACE]
