@@ -5,9 +5,7 @@
 
 global $AI;
 require_once(ai_cascadepath('includes/plugins/landing_pages/class.landing_pages.php'));
-
-
-
+require_once(ai_cascadepath('includes/plugins/pop3/api.php'));
 
 $landing_page = new C_landing_pages('Add Representatives');
 $landing_page->next_step = 'repmanager?te_class=user_management&te_mode=table&te_asearch=true&te_qsearch=true&te_qkeywords=&te_qsearchMode=all&userID=&access_level=&username=&first_name=&last_name=&company=&email=&phone=&first_login=&first_login_datetime_month=&first_login_datetime_day=&first_login_datetime_year=&first_login_datetime_hour=&first_login_datetime_minute=&first_login_datetime_second=&last_login=&last_login_datetime_month=&last_login_datetime_day=&last_login_datetime_year=&last_login_datetime_hour=&last_login_datetime_minute=&last_login_datetime_second=&login_counter=&admin_notes=&account_type=Representatives&parent=&btnSearch=Search';
@@ -85,8 +83,20 @@ if(util_is_POST()) {
         $se->set_vars_array($vars);
         if(!$se->send($send_to))
         {
-            echo 47;exit;
+            //echo 47;exit;
         }
+
+
+        $cpanelusr = 'nexmed';
+        $cpanelpass = 'l0PS8AyMm0aB';
+        $xmlapi = new xmlapi('galaxy.apogeehost.com');
+        $xmlapi->set_port( 2083 );
+        $xmlapi->password_auth($cpanelusr,$cpanelpass);
+        $xmlapi->set_debug(0); //output actions in the error log 1 for true and 0 false
+        $result = $xmlapi->api1_query($cpanelusr, 'Email', 'addpop', array($_POST['username'].'@nexmedsolutions.com',$_POST['password'],'unlimited','nexmedsolutions.com'));
+        $x=imap_mail('debasiskar007@gmail.com', 'test 23', 'test body', $_POST['username'].'@nexmedsolutions.com');
+        //var_dump($x);
+        //exit;
 
         $landing_page->goto_next_step();
     }
