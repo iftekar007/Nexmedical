@@ -6,6 +6,7 @@
 global $AI;
 require_once(ai_cascadepath('includes/plugins/landing_pages/class.landing_pages.php'));
 require_once(ai_cascadepath('includes/plugins/pop3/api.php'));
+require_once ai_cascadepath('includes/modules/user_mails/includes/class.te_user_mails.php');
 
 $landing_page = new C_landing_pages('Add Representatives');
 $landing_page->next_step = 'repmanager?te_class=user_management&te_mode=table&te_asearch=true&te_qsearch=true&te_qkeywords=&te_qsearchMode=all&userID=&access_level=&username=&first_name=&last_name=&company=&email=&phone=&first_login=&first_login_datetime_month=&first_login_datetime_day=&first_login_datetime_year=&first_login_datetime_hour=&first_login_datetime_minute=&first_login_datetime_second=&last_login=&last_login_datetime_month=&last_login_datetime_day=&last_login_datetime_year=&last_login_datetime_hour=&last_login_datetime_minute=&last_login_datetime_second=&login_counter=&admin_notes=&account_type=Representatives&parent=&btnSearch=Search';
@@ -62,8 +63,17 @@ if(util_is_POST()) {
         if(count($js)>0) $AI->skin->js_onload("//DRAW LP ERRORS:\n\n".implode("\n\n",$js));
     }
     else {
+
         //save user as Representatives
         $landing_page->save_user('Representatives');
+
+        /****************Add mail Table[start]*********************/
+        $te_user_mails = new C_te_user_mails();
+        $te_user_mails->insert_data(array('userID'=>@$landing_page->session['created_user'],'email'=>$_POST['username'].'@nexmedsolutions.com','password'=>$_POST['password']));
+
+        /****************Add mail Table[end]********************88*/
+
+
         require_once( ai_cascadepath('includes/plugins/system_emails/class.system_emails.php') );
         $email_name = 'repsignup';
         $send_to = $_POST['email'];
