@@ -68,14 +68,14 @@ try{
 $imap->selectFolder('INBOX');
 $emails = $imap->getMessages();
 
+$stream=@imap_open("{galaxy.apogeehost.com/novalidate-cert}INBOX.Sent", $username, $password);
+$uid = imap_uid($stream,$_GET['id']);
 
 $imap->selectFolder('INBOX.Sent');
-$messageheader=$imap->getMessageHeader(@$_GET['id']);
+$messageheader=$imap->getMessageHeader($uid);
 
-$msgbody=$imap->getBody(@$_GET['id']);
+$msgbody=$imap->getBody($uid);
 
-$pos = strpos($msgbody['body'], 'base64');
-$msgbody['body']=substr($msgbody['body'],$pos+6);
 $overallMessages = $imap->countMessages();
 
 $imap->selectFolder('INBOX.Trash');
@@ -87,7 +87,6 @@ $draftscount = $imap->countMessages();
 
 
 
-$stream=@imap_open("{galaxy.apogeehost.com/novalidate-cert}INBOX.Sent", $username, $password);
 $structure = imap_fetchstructure($stream, @$_GET['id']);
 
 $j=0;
@@ -218,10 +217,10 @@ $AI->skin->css('includes/plugins/imap/style.css');
                         <div class="box box-solid">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Folders</h3>
-                                <div class="box-tools">
+                                <!--<div class="box-tools">
                                     <button type="button" class="btn btn-box-tool" class="navbar-toggle" data-toggle="collapse"  data-target="#navbar-collapse-1"><span class="glyphicon glyphicon-minus"></span>
                                     </button>
-                                </div>
+                                </div>-->
                             </div>
                             <div class="box-body no-padding navbar-collapse" id="navbar-collapse-1">
                                 <ul class="nav nav-pills nav-stacked">
@@ -247,9 +246,9 @@ $AI->skin->css('includes/plugins/imap/style.css');
                             <div class="box-body no-padding">
                                 <div class="mailbox-controls with-border">
                                     <div class="pull-left readmailheadercontrol">
-                                        <button type="button" class="btn replybtn"><i class="glyphicon glyphicon-arrow-left"></i> Forward</button>
+                                        <a type="button" class="btn replybtn" href="imapcreate?type=replySent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-left"></i> Reply</a>
 
-                                        <button type="button" class="btn forwardbtn"><i class="glyphicon glyphicon-arrow-right"></i> Forward</button>
+                                        <a type="button" class="btn forwardbtn" href="imapcreate?type=forwardSent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-right"></i> Forward</a>
                                         <a type="button" class="btn trashbtn" href="<?php echo $cururl?>&mode=delete"><i class="glyphicon glyphicon-trash"></i> Trash</a>
                                     </div>
                                     <!-- /.btn-group -->
@@ -262,7 +261,10 @@ $AI->skin->css('includes/plugins/imap/style.css');
 
                                 <!-- /.mailbox-controls -->
                                 <div class="mailbox-read-message">
-                                    <?php echo $imap->convertToUtf8($msgbody['body']); ?>
+                                    <?php
+                                    echo $imap->convertToUtf8($msgbody['body']);
+                                    //echo $msgbody['body'];
+                                    ?>
                                 </div>
                                 <!-- /.mailbox-read-message -->
                             </div>

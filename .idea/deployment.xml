@@ -9,6 +9,9 @@
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/codehelp" />
+            <excludedPath local="true" path="$PROJECT_DIR$/backbone" />
+            <excludedPath path="/backbone" />
+            <excludedPath path="/codehelp" />
           </excludedPaths>
         </serverdata>
       </paths>
