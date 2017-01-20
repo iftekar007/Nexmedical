@@ -103,7 +103,7 @@ $AI->skin->css('includes/plugins/imap/style.css');
 <div class="mailinbox">
     <div class="mailinboxblock">
         <div class="mailinboxheader">
-            <h2><span>INBOX</span> Inbox</h2>
+            <h2><span>SENTBOX</span></h2>
         </div>
         <div class="mailinboxwrapper">
             <!-- Main content -->

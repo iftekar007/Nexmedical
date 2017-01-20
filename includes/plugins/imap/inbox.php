@@ -23,6 +23,7 @@ $keyword = '';
 
 global $AI;
 
+
 $userid = $AI->user->userID;
 $maildata = array('email'=>'dev007@nexmedsolutions.com','password'=>'P@ss0987');
 
@@ -173,7 +174,7 @@ $AI->skin->css('includes/plugins/imap/style.css');
 <div class="mailinbox">
     <div class="mailinboxblock">
         <div class="mailinboxheader">
-            <h2><span>INBOX</span> Inbox</h2>
+            <h2><span>INBOX</span></h2>
         </div>
         <div class="mailinboxwrapper">
             <!-- Main content -->

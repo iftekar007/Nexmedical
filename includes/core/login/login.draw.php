@@ -42,36 +42,60 @@
 ?>
 
 
-	<div id="login_box">
-		[[error_html]]
-						
-		<h3 id="login_welcome_msg" >Welcome to [[site_name]]</h3>
+	<div id="login_box" class="login_box_wrapper">
+
+
+        <img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo">
+
+		<h3 id="login_welcome_msg" >Welcome to <span>[[site_name]]</span></h3>
 		[[relay_msg]]
-						
+
+
+		<div class="loginbox_formwrapper">
+
+            <h4>Login to your account</h4>
+            [[error_html]]
 		<form name="frmLogin" method="post" action="[[relay_url]]">
 			<div class="row">
-				<div class="col-xs-12" id="username_contain">				
-										
-					<input type="text" name="username" id="username" class="login_box_input" maxlength="255" value="[[username]]" placeholder="Username"/>								
+				<div class="col-xs-12 form-group" id="username_contain">
+							<strong>User Name / Email</strong>
+					<input type="text" name="username" id="username" class="login_box_input" maxlength="255" value="[[username]]" placeholder="User Name / Email"/>
 				</div>
-				<div class="col-xs-12" id="password_contain">
-				
-					<input type="password" name="password" id="password" class="login_box_input" maxlength="255" value="" placeholder="Password"/>
+				<div class="col-xs-12 form-group" id="password_contain">
+                    <strong>Password</strong>
+                    <input type="password" name="password" id="password" class="login_box_input" maxlength="255" value="" placeholder="Password"/>
 				</div>
-				<div id="controls_area" class="col-xs-12">
-					<div id="remember_me_area" class="col-xs-8">
-						<input type="checkbox" name="chkRememberMe" id="remember_me"/>&nbsp;<label for="remember_me">Remember me</label><br/>
+
+
+
+
+				<div id="controls_area" class="col-xs-12 form-group2">
+
+                    <div id="submit_box" class="col-xs-4 login_bottomwrapper">
+                        <input type="submit" value="Login" id="login_button">
+                    </div>
+
+
+					<div id="remember_me_area" class="col-xs-8 login_bottomwrapper2">
+						<div class="rememberline"><input type="checkbox" name="chkRememberMe" id="remember_me"/>&nbsp;<label for="remember_me">Remember me</label></div>
 						<a href="[[iforgot_url]]" id="login_box_iforget">Forgot your password?</a>
+
+                        <div class="clearfix;"></div>
 					</div>
-					<div id="submit_box" class="col-xs-4">
-						<input type="submit" value="Login" id="login_button">
-					</div>
+
 				</div>
 	
 			</div>	
-		</form> 
+		</form>
+
+    </div>
+
 	</div>
-	
+
+<div class="container-fluid footer_wrapper">
+
+    Copyright &copy; 2016-2017 NEXMedical. All rights reserved.
+</div>
 <?php
 	$form_html = ob_get_contents();
 	ob_end_clean();
