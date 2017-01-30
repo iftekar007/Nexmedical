@@ -34,7 +34,7 @@
 			//!!!!!!! ALSO SET RewriteBase IN .htaccess !!!!!!!!!!
 			//URLS (Full URL and Path to application with trailing slash)
 			//$AI->set_setting( 'DEFAULT_HTTP_URL', 'http://www.nexmedsolutions.com/' );
-			$AI->set_setting( 'DEFAULT_HTTP_URL', 'http://mars.apogeehost.com/~nexmed/' );
+			$AI->set_setting( 'DEFAULT_HTTP_URL', 'http://www.nexmedsolutions.com/' );
 			$AI->set_setting( 'DEFAULT_HTTPS_URL', 'https://mars.apogeehost.com/~nexmed/' );
       		//!!!!!!! ALSO SET RewriteBase IN .htaccess !!!!!!!!!!
 			

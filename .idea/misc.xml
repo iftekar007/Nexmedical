@@ -10,4 +10,7 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/includes/plugins/lead_management/includes/views/compact/draw.lead_management.table.compact.php" />
+  </component>
 </project>

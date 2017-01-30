@@ -48,7 +48,7 @@
         <img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo">
 
 		<h3 id="login_welcome_msg" >Welcome to <span>[[site_name]]</span></h3>
-		[[relay_msg]]
+		<div class="relay_msg">[[relay_msg]]</div>
 
 
 		<div class="loginbox_formwrapper">

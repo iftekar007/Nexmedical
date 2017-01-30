@@ -69,7 +69,7 @@ if(util_is_POST()) {
 
         /****************Add mail Table[start]*********************/
         $te_user_mails = new C_te_user_mails();
-        $te_user_mails->insert_data(array('userID'=>@$landing_page->session['created_user'],'email'=>$_POST['username'].'@nexmedsolutions.com','password'=>$_POST['password']));
+        $te_user_mails->insert_data(array('userID'=>@$landing_page->session['created_user'],'email'=>strtolower($_POST['username']).'@nexmedsolutions.com','password'=>$_POST['password']));
 
         /****************Add mail Table[end]********************88*/
 
@@ -77,10 +77,10 @@ if(util_is_POST()) {
         require_once( ai_cascadepath('includes/plugins/system_emails/class.system_emails.php') );
         $email_name = 'repsignup';
         $send_to = $_POST['email'];
-        $send_from = 'ben@apogeeinvent.com';
+        //$send_from = 'ben@apogeeinvent.com';
 
         $vars = array();
-        $vars['uname'] = $_POST['username'];
+        $vars['email'] = $_POST['email'];
         $vars['pass'] = $_POST['password'];
 
         $defaults = array();
@@ -88,13 +88,14 @@ if(util_is_POST()) {
         //$defaults['email_msg'] = 'Hello [[name]], this is the default content of your email.';
 
         $se = new C_system_emails($email_name);
-        $se->set_from($send_from);
+        //$se->set_from($send_from);
         $se->set_defaults_array($defaults);
         $se->set_vars_array($vars);
-        /*if(!$se->send($send_to))
-        {
+        $myheaders = array('Bcc' => 'debasiskar007@gmail.com');
+        if (!$se->send($send_to,$myheaders)) {
             //echo 47;exit;
-        }*/
+        }
+
 
 
         $cpanelusr = 'nexmed';
@@ -103,7 +104,7 @@ if(util_is_POST()) {
         $xmlapi->set_port( 2083 );
         $xmlapi->password_auth($cpanelusr,$cpanelpass);
         $xmlapi->set_debug(0); //output actions in the error log 1 for true and 0 false
-        $result = $xmlapi->api1_query($cpanelusr, 'Email', 'addpop', array($_POST['username'].'@nexmedsolutions.com',$_POST['password'],'unlimited','nexmedsolutions.com'));
+        $result = $xmlapi->api1_query($cpanelusr, 'Email', 'addpop', array(strtolower($_POST['username']).'@nexmedsolutions.com',$_POST['password'],'unlimited','nexmedsolutions.com'));
        // $x=imap_mail('debasiskar007@gmail.com', 'test 23', 'test body', $_POST['username'].'@nexmedsolutions.com');
         //var_dump($x);
         //exit;
