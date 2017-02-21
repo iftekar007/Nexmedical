@@ -6,11 +6,11 @@ require_once ai_cascadepath(dirname(__FILE__) . '/includes/class.te_repmanager.p
 /**
  * share_links module
  */
-class video_manager_module extends module_base
+class repmanager_module extends module_base
 {
-	public $mod_system_name = 'video_manager'; // Not static because parent needs to access this
-	public $mod_name = 'Video Manager';
-	public $mod_description = 'Video Manager';
+	public $mod_system_name = 'repmanager'; // Not static because parent needs to access this
+	public $mod_name = 'rep Manager';
+	public $mod_description = 'rep Manager';
 	public $mod_version = '2.8';
 	public $mod_ignore_lock_at_or_before_version = '0.0';
 
@@ -33,7 +33,7 @@ class video_manager_module extends module_base
 
 		if ( $this->mod_is_older_version($db_version, '.1') )
 		{
-			db_query("CREATE TABLE IF NOT EXISTS `video_manager` (
+			/*db_query("CREATE TABLE IF NOT EXISTS `video_manager` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -44,7 +44,7 @@ class video_manager_module extends module_base
   `time` BIGINT( 20 ) NOT NULL DEFAULT '0',
   `live_commentry` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");*/
 
 			//CREATE PAGE(s)
 			$AI->skin->create_dynamicpage(

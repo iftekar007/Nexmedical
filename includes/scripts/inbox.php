@@ -41,7 +41,7 @@ $prevpageurl = 'imapinbox?page='.($page-1);
 $userid = $AI->user->userID;
 $maildata = array('email'=>'dev007@nexmedsolutions.com','password'=>'P@ss0987');
 
-$data = $AI->db->GetAll("SELECT * FROM user_mails WHERE userID = " . (int) $userid);
+/*$data = $AI->db->GetAll("SELECT * FROM user_mails WHERE userID = " . (int) $userid);
 $pass = 'P@ss0987';
 if(isset($data[0])){
     $password = base64_decode(base64_decode($data[0]['password']));
@@ -54,6 +54,8 @@ if(isset($data[0])){
     db_query( "INSERT INTO `user_mails` ( `userID`, `email`, `password`) VALUES ( ".$AI->user->userID.", '".strtolower($AI->user->username)."@nexmedsolutions.com', '".base64_encode(base64_encode($pass))."')");
 
 }
+*/
+
 
 $cururl= 'imapinbox';
 

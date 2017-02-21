@@ -5,7 +5,9 @@
  * Date: 11/1/17
  * Time: 5:23 PM
  */
-namespace program;
+
+require_once( ai_cascadepath('includes/plugins/imap/imap.php') );
+require_once( ai_cascadepath( 'includes/core/upload/class.upload.php' ) );
 
 require_once "ImapClient/ImapClientException.php";
 require_once "ImapClient/ImapConnect.php";
@@ -199,10 +201,279 @@ if(count($attachs)){
     $attchmentstr .= '</ul>';
 }
 
-
 global $AI;
 $AI->skin->css('includes/plugins/imap/style.css');
+
+$toaddr_arr = array();
+$toaddr = '';
+
+$tos = $messageheader->to;
+$tos = count($tos);
+
+if(isset($messageheader->reply_to)){
+    $reply = $messageheader->reply_to;
+    if(isset($reply[0])){
+        $toaddr = $reply[0]->mailbox."@".$reply[0]->host;
+    }
+}
+
+if(isset($messageheader->to)){
+    $to = $messageheader->to;
+    if(count($to)){
+        foreach($to as $row){
+            $toaddr_arr[] = trim($row->mailbox)."@".trim($row->host);
+        }
+    }
+}
+
+$resubject = $messageheader->subject;
+if(!empty($resubject)){
+    if(substr($resubject, 0, 3) != 'Re:'){
+        $resubject = 'Re: '.$resubject;
+    }
+}
+
+$fwdsubject = $messageheader->subject;
+$fwdsubject = 'Fwd: '.$fwdsubject;
+
+$modifiedbody = $msgbody['body'];
+$modifiedbody = strip_single_tag($msgbody['body'],'html');
+$modifiedbody = strip_single_tag($modifiedbody,'body');
+$modifiedbody = strip_tags_content($modifiedbody, '<head>', TRUE);
+
+
+$replyBody = '<br><br><div>On '.date('D, M d, Y',$messageheader->udate).' at '.date('h:i A',$messageheader->udate).', '.$messageheader->fromaddress.' wrote:<div style="padding-left: 10px; border-left: solid #999999 1px;">'.$modifiedbody.'</div></div>';
+
+$forwardBody = '<div>---------- Forwarded message ----------<br>From: '.$messageheader->fromaddress.'<br>Date: '.date('D, M d, Y',$messageheader->udate).' at '.date('h:i A',$messageheader->udate).'<br>Subject: '.$messageheader->subject.'<br>To: '.$messageheader->toaddress.'</div><br><br><div>'.$modifiedbody.'</div>';
+
+
+if(util_is_POST()) {
+    require_once( ai_cascadepath('includes/plugins/system_emails/class.system_emails.php') );
+    require_once( ai_cascadepath('includes/core/classes/email.php') );
+
+    $mailbody = $_POST['body'];
+    $mailbody = stripslashes($mailbody);
+
+    $boundary = "------=".md5(uniqid(rand()));
+
+    $msg1 = '';
+    $msg2 = '';
+    $msg3 = '';
+
+    $header = "MIME-Version: 1.0\r\n";
+    $header .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+    $header .= "\r\n";
+
+    $msg1 .= "--$boundary\r\n";
+    $msg1 .= "Content-Type: text/html;\r\n\tcharset=\"utf-8\"\r\n";
+    $msg1 .= "Content-Transfer-Encoding: 8bit \r\n";
+    $msg1 .= "\r\n\r\n" ;
+    $msg1 .= html_entity_decode($mailbody)."\r\n";
+    $msg1 .= "\r\n\r\n";
+    $msg3 .= "--$boundary--\r\n";
+
+    if(isset($_POST['ai_upload_add'])){
+        foreach($_POST['ai_upload_add'] as $row){
+            $file2 = $row;
+            $file_arr = explode('|',$file2);
+            $file= $_SERVER['DOCUMENT_ROOT'].'/uploads/files/'.$file_arr[0].'/'.$file_arr[1];
+
+            $filename=$file_arr[1];
+            $ouv=fopen ("$file", "rb");$lir=fread ($ouv, filesize ("$file"));fclose
+            ($ouv);
+            $attachment = chunk_split(base64_encode($lir));
+
+            $msg2 .= "--$boundary\r\n";
+            $msg2 .= "Content-Transfer-Encoding: base64\r\n";
+            $msg2 .= "Content-Disposition: attachment; filename=\"$filename\"\r\n";
+            $msg2 .= "\r\n";
+            $msg2 .= $attachment . "\r\n";
+            $msg2 .= "\r\n\r\n";
+        }
+    }
+
+    $toaddr = array();
+    if(isset($_POST['toaddrs']))
+        $toaddr = $_POST['toaddrs'];
+    if(!empty($_POST['toaddrcus'])){
+        $toaddr[] = $_POST['toaddrcus'];
+    }
+
+    $toaddr = array_unique($toaddr);
+
+
+    $subject = '';
+    if($_POST['mailtype'] == 'reply'){
+        $subject = $_POST['resubject'];
+    }
+
+    if($_POST['mailtype'] == 'forward'){
+        $subject = $_POST['fwdsubject'];
+    }
+
+    if(isset($_POST['ai_upload_add'])){
+
+        $mailbody .= '<br><br><br>';
+
+        foreach($_POST['ai_upload_add'] as $row){
+            $file = $row;
+            $file_arr = explode('|',$file);
+            $mailbody .= '<a href="http://nexmedsolutions.com/uploads/files/'.$file_arr[0].'/'.strtolower($file_arr[1]).'">'.strtolower($file_arr[1]).'</a><br>';
+        }
+    }
+
+    $email_name = 'imapsent';
+    $send_to = implode(',',$toaddr);
+
+    $default_vars = array
+    (
+        'email_msg' => $mailbody,
+        'email_subject' => $subject,
+        'title' => $email_name
+    );
+
+
+    if($_POST['subtype'] == 'drafts'){
+        imap_append($stream, "{galaxy.apogeehost.com}INBOX.Drafts"
+            , "From: ".$maildata['email']."\r\n"."To: ".$send_to."\r\n"."Subject: ".$subject."\r\n"."$header\r\n"."$msg1\r\n"."$msg2\r\n"."$msg3\r\n");
+        imap_close ($stream);
+        util_redirect('imapdrafts');
+    }elseif ($_POST['subtype'] == 'send'){
+        $sys_email = new C_system_emails($email_name);
+
+        $sys_email->set_from($maildata['email']);
+        $sys_email->set_from_name($maildata['name']);
+
+        $sys_email->encode_vars=false;
+        $sys_email->set_vars_array(array());
+        $sys_email->set_defaults_array($default_vars);
+
+
+
+
+        if($sys_email->send($send_to)){
+            imap_append($stream, "{galaxy.apogeehost.com}INBOX.Sent"
+                , "From: ".$maildata['email']."\r\n"."To: ".$send_to."\r\n"."Subject: ".$subject."\r\n"."$header\r\n"."$msg1\r\n"."$msg2\r\n"."$msg3\r\n");
+            imap_close ($stream);
+
+            if(count($toaddr)){
+                foreach($toaddr as $row){
+                    $mailres = $AI->db->GetAll("SELECT * FROM `mail_id_list` WHERE `userID`=".(int)$userid." AND `mail` LIKE '".$row."'");
+                    if(count($mailres) == 0){
+                        db_query("INSERT INTO `mail_id_list` ( `userID`, `mail`) VALUES ( ".$userid.", '".$row."');");
+                    }
+                }
+            }
+
+            util_redirect('imapsentbox');
+        }
+
+        if($sys_email->has_errors())
+        {
+            print_r($sys_email->get_errors());
+        }
+
+    }else{
+        util_redirect('imapinbox');
+    }
+
+}
+
+
+
+function strip_single_tag($str,$tag){
+
+    $str1=preg_replace('/<\/'.$tag.'>/i', '', $str);
+
+    if($str1 != $str){
+
+        $str=preg_replace('/<'.$tag.'[^>]*>/i', '', $str1);
+    }
+
+    return $str;
+}
+
+function strip_tags_content($text, $tags = '', $invert = FALSE) {
+
+    preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
+    $tags = array_unique($tags[1]);
+
+    if(is_array($tags) AND count($tags) > 0) {
+        if($invert == FALSE) {
+            return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
+        }
+        else {
+            return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text);
+        }
+    }
+    elseif($invert == FALSE) {
+        return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text);
+    }
+    return $text;
+}
+
+
 ?>
+
+<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+<script type="text/javascript" src="includes/plugins/imap/imap.js"></script>
+
+<script>
+
+    function replymail() {
+        $('.replybox').show();
+        $('.replybox2').hide();
+        $('#mailtype').val('reply');
+
+        $('span.toaddrspan:not(:first)').remove();
+        $('#compose-textarea').html($('#replybody5').val());
+
+        tinymceinit22();
+    }
+
+    function replyallmail(){
+        $('.replybox').show();
+        $('.replybox2').hide();
+        $('#mailtype').val('reply');
+        $('#compose-textarea').html($('#replybody5').val());
+
+        tinymceinit22();
+    }
+
+    function forwardmail() {
+        $('.replybox').show();
+        $('.replybox2').hide();
+        $('#mailtype').val('forward');
+
+        $('span.toaddrspan').remove();
+        $('#compose-textarea').html($('#forwardbody').val());
+
+        tinymceinit22();
+    }
+
+    function tinymceinit22() {
+
+        tinymce.init({
+            selector: 'textarea#compose-textarea',
+            height: 500,
+            //width:100%,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code fullscreen',
+                'insertdatetime media nonbreaking save table contextmenu directionality',
+                'emoticons template paste textcolor colorpicker textpattern imagetools code toc'
+            ],
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor link | code'
+        });
+
+    }
+
+</script>
+
+<textarea id="replybody5" style="display: none;"><?php echo $replyBody; ?></textarea>
+<textarea id="forwardbody" style="display: none;"><?php echo $forwardBody; ?></textarea>
+
 
 <div class="mailinbox">
     <div class="mailinboxblock">
@@ -230,10 +501,12 @@ $AI->skin->css('includes/plugins/imap/style.css');
                             </div>
                             <div class="box-body no-padding navbar-collapse" id="navbar-collapse-1">
                                 <ul class="nav nav-pills nav-stacked">
+                                    <li><a href="imapcreate"><span class="glyphicon glyphicon-pencil"></span>Compose</span></a></li>
                                     <li><a href="/~nexmed/imapinbox"><span class="glyphicon glyphicon-inbox"></span>Inbox <span class="label label-green pull-right"><?php echo count($emails) ; ?></span></a></li>
-                                    <li><a href="/~nexmed/imapdrafts"><span class="glyphicon glyphicon-pencil"></span> Drafts<span class="label label-red pull-right"><?php echo $draftscount; ?></span></a></li>
+                                    <li><a href="/~nexmed/imapdrafts"><span class="glyphicon glyphicon-folder-open"></span> Drafts<span class="label label-red pull-right"><?php echo $draftscount; ?></span></a></li>
                                     <li class="activemail"><a href="/~nexmed/imapsentbox"><span class="glyphicon glyphicon-envelope"></span> Sent Mail <span class="label label-red pull-right"><?php echo $overallMessages; ?></span></a></li>
                                     <li><a href="/~nexmed/imaptrash"><span class="glyphicon glyphicon-trash"></span> Trash<span class="label label-red pull-right"><?php echo $trashcount; ?></span></a></li>
+                                    <li><a href="set-signature"><span class="glyphicon glyphicon-cog"></span> Settings</span></a></li>
                                 </ul>
                             </div>
                             <!-- /.box-body -->
@@ -258,15 +531,15 @@ $AI->skin->css('includes/plugins/imap/style.css');
                             <div class="box-body no-padding">
                                 <div class="mailbox-controls with-border">
                                     <div class="pull-left readmailheadercontrol">
-                                        <a type="button" class="btn replybtn" href="imapcreate?type=replySent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-left"></i> Reply</a>
+                                        <!--<a type="button" class="btn replybtn" href="imapcreate?type=replySent&id=<?php //echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-left"></i> Reply</a>
 
-                                        <a type="button" class="btn forwardbtn" href="imapcreate?type=forwardSent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-right"></i> Forward</a>
+                                        <a type="button" class="btn forwardbtn" href="imapcreate?type=forwardSent&id=<?php //echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-right"></i> Forward</a>-->
                                         <a type="button" class="btn trashbtn" href="<?php echo $cururl?>&mode=delete"><i class="glyphicon glyphicon-trash"></i> Trash</a>
                                     </div>
                                     <!-- /.btn-group -->
                                 </div>
                                 <div class="mailbox-read-info">
-                                    <h5 class="form-control"><span class="span1">From</span> <span class="span2"> <?php echo $messageheader->toaddress; ?> </span></h5>
+                                    <h5 class="form-control"><span class="span1">To</span> <span class="span2"> <?php echo $messageheader->toaddress; ?> </span></h5>
                                     <h5 class="form-control"><span class="span1">Subject</span> <span class="span2"><?php echo $messageheader->subject ; ?></span> </h5>
                                 </div>
                                 <!-- /.mailbox-read-info -->
@@ -285,15 +558,69 @@ $AI->skin->css('includes/plugins/imap/style.css');
                                 <?php echo $attchmentstr; ?>
 
                             </div>
-                            <div class="mailbox-controls with-border">
+                            <!--<div class="mailbox-controls with-border">
                                 <div class="pull-left readmailheadercontrol">
-                                    <a type="button" class="btn replybtn" href="imapcreate?type=replySent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-left"></i> Reply</a>
+                                    <a type="button" class="btn replybtn" href="imapcreate?type=replySent&id=<?php //echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-left"></i> Reply</a>
 
-                                    <a type="button" class="btn forwardbtn" href="imapcreate?type=forwardSent&id=<?php echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-right"></i> Forward</a>
-                                    <a type="button" class="btn trashbtn" href="<?php echo $cururl?>&mode=delete"><i class="glyphicon glyphicon-trash"></i> Trash</a>
+                                    <a type="button" class="btn forwardbtn" href="imapcreate?type=forwardSent&id=<?php //echo @$_GET['id']; ?>"><i class="glyphicon glyphicon-arrow-right"></i> Forward</a>
+                                    <a type="button" class="btn trashbtn" href="<?php //echo $cururl?>&mode=delete"><i class="glyphicon glyphicon-trash"></i> Trash</a>
                                 </div>
-                                <!-- /.btn-group -->
+
+                            </div>-->
+
+                            <div style="clear: both;"></div>
+
+                            <div class="form-group form-control replybox2" style="padding-bottom: 18px; height: 70px;">
+                                Click here to <a href="javascript:void(0);" onclick="replymail()">Reply</a><?php echo ($tos > 1)?', <a href="javascript:void(0);" onclick="replyallmail()">Reply to all</a>':''; ?> or <a href="javascript:void(0);" onclick="forwardmail()">Forward</a>
                             </div>
+
+                            <form action="<?=$_SERVER['REQUEST_URI']?>" method="post" class="writemailinboxwrapper ">
+
+                                <input type="hidden" name="mailtype" id="mailtype">
+                                <input type="hidden" name="resubject" value="<?php echo $resubject;?>">
+                                <input type="hidden" name="fwdsubject" value="<?php echo $fwdsubject;?>">
+
+                                <div class="form-group toaddrcls form-control replybox" style="padding-bottom: 18px; display: none;">
+                                    <div class="clearfix"></div>
+                                    <?php
+                                    if(count($toaddr_arr)){
+                                        foreach($toaddr_arr as $row){
+                                            ?>
+                                            <span class="toaddrspan">
+                                            <input type="hidden" name="toaddrs[]" value="<?php echo trim($row)?>" >
+                                                <?php echo trim($row)?>
+                                                <a onclick="mailclose(this)" href="javascript:void();">x</a>
+                                        </span>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+
+                                    <select name="mailselect" id="mailselect" style="display:none">
+                                    </select>
+                                </div>
+
+                                <div class="form-group replybox" id="replybody" style="display: none;">
+                                    <textarea name="body" id="compose-textarea" class="form-control"></textarea>
+                                </div>
+                                <div class="replybox" style="display: none;">
+                                    <?php
+
+                                    $upload = new C_upload('','');
+                                    $upload->run();
+
+                                    ?>
+                                </div>
+                                <div class="box-footer replybox" style="display: none;">
+                                    <div class="pull-left">
+                                        <button type="submit" name="subtype" class="btn btnsend" value="send">Send</button>
+                                        <button type="submit" name="subtype" class="btn btndraft" value="drafts">Draft</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+
                         </div>
                         <!-- /. box -->
                     </div>
