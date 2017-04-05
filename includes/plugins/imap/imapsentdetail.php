@@ -18,6 +18,9 @@ use SSilence\ImapClient\ImapConnect;
 use SSilence\ImapClient\ImapClient as Imap;
 
 global $AI;
+if($AI->user->account_type == 'Approved Reps'){
+    require_once ('includes/scripts/rep_dashboard_header.php');
+}
 
 $cururl = 'imapsentdetail?id='.$_GET['id'];
 
@@ -168,8 +171,8 @@ if(isset($_GET['mode'])){
         }
     }elseif ($_GET['mode'] == 'delete'){
         if(isset($_GET['id'])){
-                imap_mail_move($stream, $_GET['id'], 'INBOX.Trash');
-                imap_expunge($stream);
+            imap_mail_move($stream, $_GET['id'], 'INBOX.Trash');
+            imap_expunge($stream);
         }
         util_redirect('imapinbox');
     }
@@ -311,16 +314,16 @@ if(util_is_POST()) {
         $subject = $_POST['fwdsubject'];
     }
 
-    if(isset($_POST['ai_upload_add'])){
+    /*  if(isset($_POST['ai_upload_add'])){
 
-        $mailbody .= '<br><br><br>';
+          $mailbody .= '<br><br><br>';
 
-        foreach($_POST['ai_upload_add'] as $row){
-            $file = $row;
-            $file_arr = explode('|',$file);
-            $mailbody .= '<a href="http://nexmedsolutions.com/uploads/files/'.$file_arr[0].'/'.strtolower($file_arr[1]).'">'.strtolower($file_arr[1]).'</a><br>';
-        }
-    }
+          foreach($_POST['ai_upload_add'] as $row){
+              $file = $row;
+              $file_arr = explode('|',$file);
+              $mailbody .= '<a href="http://nexmedsolutions.com/uploads/files/'.$file_arr[0].'/'.strtolower($file_arr[1]).'">'.strtolower($file_arr[1]).'</a><br>';
+          }
+      }*/
 
     $email_name = 'imapsent';
     $send_to = implode(',',$toaddr);
@@ -339,19 +342,92 @@ if(util_is_POST()) {
         imap_close ($stream);
         util_redirect('imapdrafts');
     }elseif ($_POST['subtype'] == 'send'){
-        $sys_email = new C_system_emails($email_name);
+        /* $sys_email = new C_system_emails($email_name);
 
-        $sys_email->set_from($maildata['email']);
-        $sys_email->set_from_name($maildata['name']);
+         $sys_email->set_from($maildata['email']);
+         $sys_email->set_from_name($maildata['name']);
 
-        $sys_email->encode_vars=false;
-        $sys_email->set_vars_array(array());
-        $sys_email->set_defaults_array($default_vars);
-
-
+         $sys_email->encode_vars=false;
+         $sys_email->set_vars_array(array());
+         $sys_email->set_defaults_array($default_vars);*/
 
 
-        if($sys_email->send($send_to)){
+
+        $sql=db_query("select * from email_info where id=1");
+        $res=db_fetch_assoc($sql);
+        $username=@$res['username'];
+        $password=@$res['password'];
+        $url = 'https://api.sendgrid.com/';
+        // $user = 'nexmed';
+        //  $pass = 'zxcvbn*6767';
+
+        $json_string = array(
+
+            'to' => $toaddr,
+            'category' => 'test_category'
+        );
+
+
+        $params = array(
+            'api_user'  => $username,
+            'api_key'   => $password,
+            'x-smtpapi' => json_encode($json_string),
+            'to'        => $toaddr[0],
+            'subject'   => $subject,
+            'html'      => $mailbody,
+            'text'      => 'testing body',
+            'from'      => $maildata['email'],
+            //'files'     =>$files,
+            // 'files[1_0_250_1_1_0.jpg]' => $files
+            //'files[1_0_250_1_1_0.jpg]' => '/home/nexmed/public_html/uploads/documents/1_0_250_1_1_0.jpg',
+            //'files[example_021.pdf]' =>  '@'.ai_cascadepath('uploads/documents').'/example_021.pdf',
+            //  'files[i.jpg]' =>  '@'.ai_cascadepath('uploads/documents').'/1.jpg'
+        );
+
+        //   $params['files[example_021.pdf]'] = '@'.ai_cascadepath('uploads/documents').'/example_021.pdf';
+        //$params['files[combined_testing_11-3-16.pdf]'] = '@'.ai_cascadepath('uploads/documents').'/combined_testing_11-3-16.pdf';
+        //$params['files[Logo.png]'] = '@'.ai_cascadepath('uploads/documents').'/Logo.png';
+        //sleep(5);
+
+        foreach($_POST['ai_upload_add'] as $row){
+            $file = $row;
+            // print_r($row);
+            // echo "<br/>";
+            $file_arr = explode('|',$file);
+            //  $files[strtolower($file_arr[1])] = '@'.ai_cascadepath('uploads/documents').'/'.$file_arr[1];
+            $params['files['.strtolower($file_arr[1]).']'] = '@'.ai_cascadepath('uploads/files').'/'.$file_arr[0].'/'.strtolower($file_arr[1]);
+            //$mailbody .= '<a href="http://mars.apogeehost.com/~nexmed/uploads/files/'.$file_arr[0].'/'.strtolower($file_arr[1]).'">'.strtolower($file_arr[1]).'</a><br>';
+
+
+        }
+
+//echo ai_cascadepath('uploads/documents').'/example_021.pdf';
+
+//echo $filePath = dirname(__FILE__);
+        //print_r($params);
+        //exit;
+        $request =  $url.'api/mail.send.json';
+
+// Generate curl request
+        $session = curl_init($request);
+
+// Tell curl to use HTTP POST
+        curl_setopt ($session, CURLOPT_POST, true);
+
+// Tell curl that this is the body of the POST
+        curl_setopt ($session, CURLOPT_POSTFIELDS, $params);
+
+// Tell curl not to return headers, but do return the response
+        curl_setopt($session, CURLOPT_HEADER, false);
+// Tell PHP not to use SSLv3 (instead opting for TLS)
+        curl_setopt($session, CURLOPT_SSLVERSION, 6);
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+// obtain response
+        $response = curl_exec($session);
+        curl_close($session);
+
+        if($response){
             imap_append($stream, "{galaxy.apogeehost.com}INBOX.Sent"
                 , "From: ".$maildata['email']."\r\n"."To: ".$send_to."\r\n"."Subject: ".$subject."\r\n"."$header\r\n"."$msg1\r\n"."$msg2\r\n"."$msg3\r\n");
             imap_close ($stream);
@@ -368,10 +444,10 @@ if(util_is_POST()) {
             util_redirect('imapsentbox');
         }
 
-        if($sys_email->has_errors())
-        {
-            print_r($sys_email->get_errors());
-        }
+        /*  if($sys_email->has_errors())
+          {
+              print_r($sys_email->get_errors());
+          }*/
 
     }else{
         util_redirect('imapinbox');
@@ -474,12 +550,21 @@ function strip_tags_content($text, $tags = '', $invert = FALSE) {
 <textarea id="replybody5" style="display: none;"><?php echo $replyBody; ?></textarea>
 <textarea id="forwardbody" style="display: none;"><?php echo $forwardBody; ?></textarea>
 
+<div class="container-fluid  adddoctor_banner_block mailhead">
+    <div class="container">
+        <h2>Sentbox</h2>
+    </div>
+</div>
+
 
 <div class="mailinbox">
     <div class="mailinboxblock">
         <div class="mailinboxheader">
 
-            <div class="maillogodiv"></div>
+            <?php if($AI->user->account_type != 'Approved Reps'){ ?>
+
+                <div class="maillogodiv"></div>
+            <?php } ?>
 
             <div class="clearfix"></div>
 
@@ -516,7 +601,7 @@ function strip_tags_content($text, $tags = '', $invert = FALSE) {
                     <!-- /mailright.col -->
                     <div class="col-md-10 col-sm-9 col-xs-12 mailinboxright readmailinboxouterwrapper">
                         <div class="new_form_header">
-                        <h2><span>Mail</span> </h2>
+                            <h2><span>Mail</span> </h2>
 
                             <div class="clearfix"></div>
                         </div>

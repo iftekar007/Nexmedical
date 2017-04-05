@@ -38,31 +38,35 @@
 					$relayDisplayName.'</b><br/>
 					<a href="'.url('login.php').'">Click Here</a> for the Standard Login Page </div>';
 	 
-	ob_start();	
+	ob_start();
+
+
 ?>
 
 
 	<div id="login_box" class="login_box_wrapper">
 
 
-        <img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo">
+        <a href="/"><img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo"></a>
 
-		<h3 id="login_welcome_msg" >Welcome to <span>[[site_name]]</span></h3>
+		<!--<h3 id="login_welcome_msg" >Welcome to <span>[[site_name]]</span></h3>-->
+
+        <h3>Rep’s login</h3>
 		<div class="relay_msg">[[relay_msg]]</div>
 
 
 		<div class="loginbox_formwrapper">
 
-            <h4>Login to your account</h4>
+           <!-- <h4>Login to your account</h4>-->
             [[error_html]]
 		<form name="frmLogin" method="post" action="[[relay_url]]">
 			<div class="row">
 				<div class="col-xs-12 form-group" id="username_contain">
-							<strong>User Name / Email</strong>
+							<!--<strong>User Name / Email</strong>-->
 					<input type="text" name="username" id="username" class="login_box_input" maxlength="255" value="[[username]]" placeholder="User Name / Email"/>
 				</div>
 				<div class="col-xs-12 form-group" id="password_contain">
-                    <strong>Password</strong>
+                  <!--  <strong>Password</strong>-->
                     <input type="password" name="password" id="password" class="login_box_input" maxlength="255" value="" placeholder="Password"/>
 				</div>
 
@@ -72,13 +76,15 @@
 				<div id="controls_area" class="col-xs-12 form-group2">
 
                     <div id="submit_box" class="col-xs-4 login_bottomwrapper">
-                        <input type="submit" value="Login" id="login_button">
+                        <input type="submit" value="sign in" id="login_button">
                     </div>
 
 
 					<div id="remember_me_area" class="col-xs-8 login_bottomwrapper2">
-						<div class="rememberline"><input type="checkbox" name="chkRememberMe" id="remember_me"/>&nbsp;<label for="remember_me">Remember me</label></div>
-						<a href="[[iforgot_url]]" id="login_box_iforget">Forgot your password?</a>
+						<!--<div class="rememberline"><input type="checkbox" name="chkRememberMe" id="remember_me"/>&nbsp;<label for="remember_me">Remember me</label></div>-->
+                        <span class="notregistered">Not registered? <a href="contactus">Request Sign Up Here</a></span>
+
+                        <a href="[[iforgot_url]]" id="login_box_iforget">Forgot your password?</a>
 
                         <div class="clearfix;"></div>
 					</div>
@@ -92,10 +98,10 @@
 
 	</div>
 
-<div class="container-fluid footer_wrapper">
+<!--<div class="container-fluid footer_wrapper">
 
     Copyright &copy; 2016-2017 NEXMedical. All rights reserved.
-</div>
+</div>-->
 <?php
 	$form_html = ob_get_contents();
 	ob_end_clean();

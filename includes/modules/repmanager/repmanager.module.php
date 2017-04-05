@@ -85,7 +85,7 @@ class repmanager_module extends module_base
 	 */
 	public function mod_help()
 	{
-		echo '<p>This module creates a video_manager manager database.</p>';
+		echo '<p>This module creates a video_manager manager dbbackup.</p>';
 	}
 
 	/**

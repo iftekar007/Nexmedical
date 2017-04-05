@@ -295,7 +295,7 @@ else
 <script>
     function traincmplt() {
         $.get('quizcomplete',{},function (res) {
-            window.location.href='imapinbox';
+            window.location.href='dashboard';
         })
     }
 </script>

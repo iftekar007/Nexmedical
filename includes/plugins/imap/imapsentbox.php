@@ -36,6 +36,9 @@ $prevpageurl = 'imapsentbox?page='.($page-1);
 
 
 global $AI;
+if($AI->user->account_type == 'Approved Reps'){
+    require_once ('includes/scripts/rep_dashboard_header.php');
+}
 
 $userid = $AI->user->userID;
 $maildata = array('email'=>'dev007@nexmedsolutions.com','password'=>'P@ss0987');
@@ -233,6 +236,11 @@ $AI->skin->css('includes/plugins/imap/style.css');
 
 </script>
 
+<div class="container-fluid  adddoctor_banner_block mailhead">
+    <div class="container">
+        <h2>Sentbox</h2>
+    </div>
+</div>
 
 
 <div class="mailinbox">
@@ -240,7 +248,10 @@ $AI->skin->css('includes/plugins/imap/style.css');
         <div class="mailinboxheader">
 
 
-            <div class="maillogodiv"></div>
+            <?php if($AI->user->account_type != 'Approved Reps'){ ?>
+
+                <div class="maillogodiv"></div>
+            <?php } ?>
 
             <div class="mailinboxheader_form">
 

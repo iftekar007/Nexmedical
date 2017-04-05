@@ -21,23 +21,23 @@
 		$view_link = $this->db['url'];
 	}
 ?>
-<div class="te_table documents_table" style="width: 720px;">
-	<h2 style="max-width:515px"><?= h( $this->db['title'] ); ?></h2>
+<div class="te_table documents_table">
+	<h2><?= h( $this->db['title'] ); ?></h2>
 	<?php if($this->perm->get('manage_categories')) { ?>
-	<div style="float: right;">
+	<div>
 		<sup class="admin"></sup>
-		<a href="documents?te_mode=update&te_key=<?=$this->te_key?>" target="_parent" class="icon_button">
+		<a href="documents?te_mode=update&te_key=<?=$this->te_key?>" target="_parent" class="icon_button" style="width: 220px; margin: 5px auto; float: none;     padding: 7px 7px 6px 7px;">
 			<img src="images/icons/circ_edit_32.png">
 			<span>Edit Document</span>
 		</a>
 		<sup class="admin"></sup>
-		<a href="documents?te_mode=delete&te_key=<?=$this->te_key?>" target="_parent" class="icon_button">
+		<a href="documents?te_mode=delete&te_key=<?=$this->te_key?>" target="_parent" class="icon_button" style="width: 220px; margin: 5px auto; float: none;     padding: 7px 7px 6px 7px;">
 			<img src="images/icons/circ_delete_32.png">
 			<span>Delete Document</span>
 		</a>
 	</div>
 	<?php } ?>
-	<div style="width:515px">
+	<div class="resourcespopup_textcon">
 <?php
 
 	$sr = exec("file -i -b " . $this->upload_dir.$this->db['file_name']);
@@ -57,13 +57,17 @@
 			break;
 
 		case 'video':
+			echo '<div style="width:480px; margin:12px auto;">';
 			if ( $this->db['url'] != '' ) {
-				echo '<video width="480" height="320" id="player' . $id . '" preload="none">';
+
+				echo '<video width="480" height="315"  id="player' . $id . '" preload="none">';
 				echo '<source type="video/youtube" src="' . $this->db['url'] . '">';
 				echo '</video>';
 			} else {
-				echo '<video width="480" height="320" src="' . $this->upload_dir.$this->db['file_name'] . '" id="player' . $id . '" controls="controls"></video>';
+				echo '<video width="480"  height="315"  src="' . $this->upload_dir.$this->db['file_name'] . '" id="player' . $id . '" controls="controls"></video>';
 			}
+
+			echo '</echo>';
 
 			echo "<script>$('#player" . $id . "').mediaelementplayer({enableAutosize:true,pauseOtherPlayers:true,plugins:['flash','silverlight'],pluginPath:'includes/core/js/me-js/'})</script><br>";
 			break;
@@ -87,14 +91,46 @@
 		<p><?=($this->db['description']==''?'<em>No Description.</em>':str_replace("\n",'<br>', h($this->db['description'])))?></p>
 		<br clear="both">
 	</div>
-	<div style="padding-top: 15px;">
-		<a href="<?=$view_link?>" target="<?=$this->db['target']?>" onclick="close_jonbox();" class="icon_button" style="width:185px;display:inline-block">
-			<img src="images/mimes/browser.png">
-			<span>View Online</span>
-		</a>
+	<div>
 
-		<?=($file_link!==false && $AI->user->account_type=='Doctors')?'
-		<a href="documents_download?te_key='.$this->db['id'].'" onclick="close_jonbox();" class="icon_button" style="margin-left:15px;width:185px;display:inline-block">
+		<?php
+
+		$newfilename = $this->db['file_name'];
+		$newfileext = '';
+
+		if(!empty($newfilename)){
+			$newfileext = pathinfo($newfilename,PATHINFO_EXTENSION);
+		}
+
+
+		?>
+
+		<?php
+			if($newfileext == 'pdf'){
+
+				?>
+
+
+				<a href="javascript:void(0);" onclick="close_jonbox(); open_jonbox('showpdfpreview1?fileurl=<?php echo $this->upload_dir.$this->db['file_name'];?>')" class="icon_button" style="width: 220px; margin: 5px auto; float: none;     padding: 7px 7px 6px 7px;" >
+					<img src="images/mimes/browser.png">
+					Show Preview
+				</a>
+
+				<?php
+			}else{
+				?>
+
+				<a href="<?=$view_link?>" target="<?=$this->db['target']?>" onclick="close_jonbox();" class="icon_button" style="width: 220px; margin: 5px auto; float: none;     padding: 7px 7px 6px 7px;" >
+					<img src="images/mimes/browser.png">
+					View Online
+				</a>
+
+				<?php
+			}
+		?>
+
+		<?=($file_link!==false)?'
+		<a href="documents_download?te_key='.$this->db['id'].'" onclick="close_jonbox();" class="icon_button" style="margin-left:15px;width:185px;display:none;">
 		<img src="images/icons/book_save_48.gif" />
 		<span>Download File</span></a>
 		':''?></div>

@@ -59,7 +59,7 @@ global $AI;
 			//$this->db;
 
 			//INITIALIZE SEARCH VARS
-			//these should NOT conflict with database fields above
+			//these should NOT conflict with dbbackup fields above
 			$this->search_vars['example_of_a_special_search_var'] = '';
 
 			//INITIALIZE DATABASE DESCRIPTION
@@ -301,7 +301,7 @@ global $AI;
 
 				case 'live_commentry' : {
 
-					print_r($this->db);
+					//print_r($this->db);
 
 					echo '<script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>';
 					//echo '<script src="includes/plugins/tinymce/tinymce.min.js"></script>';

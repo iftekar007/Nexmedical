@@ -23,6 +23,9 @@ $searchmail = array();
 $keyword = '';
 
 global $AI;
+if($AI->user->account_type == 'Approved Reps'){
+    require_once ('includes/scripts/rep_dashboard_header.php');
+}
 
 $page = 1;
 $perpage = 10;
@@ -260,11 +263,20 @@ $AI->skin->css('includes/plugins/imap/style.css');
 
 </script>
 
+<div class="container-fluid  adddoctor_banner_block mailhead">
+    <div class="container">
+        <h2>Inbox</h2>
+    </div>
+</div>
+
 <div class="mailinbox">
     <div class="mailinboxblock">
         <div class="mailinboxheader">
 
-            <div class="maillogodiv"></div>
+            <?php if($AI->user->account_type != 'Approved Reps'){ ?>
+
+                <div class="maillogodiv"></div>
+            <?php } ?>
             <div class="mailinboxheader_form">
             <form id="searchform" method="get" action="<?php echo $cururl;?>">
                 <input type="hidden" name="mode" value="search">

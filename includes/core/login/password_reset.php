@@ -81,7 +81,7 @@
 ?>
 <div class="login_box_wrapper">
 
-    <img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo">
+    <a href="/"><img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo"></a>
 
     <h3>Reset <span>Password</span></h3>
 
@@ -176,7 +176,7 @@
 						</tr>
 						<tr>
                             <td colspan="2">
-                                <h4 style="font-size: 18px; text-transform: capitalize;"><span style="color: #000; display: inline-block; padding-right: 10px;">username:</span> 	<?= $user['username']?></h4>
+                                <h4 style="font-size: 18px; text-transform: capitalize;"><span style="color: #fff; display: inline-block; padding-right: 10px;">username:</span> 	<?= $user['username']?></h4>
 							</td>
 
 						</tr>
@@ -192,7 +192,7 @@
 		<tr>
 			<td colsapn="2">
                 <h4 style="font-size: 16px; text-transform: capitalize; padding-bottom: 8px; text-align: left; text-transform: uppercase;">Password must be:</h4>
-				<ul style="text-align: left;" >
+				<ul style="text-align: left; color: #bdffdc;" >
 					<li> 7 characters in length </li>
 					<li> Contain one or more lower case character </li>
 					<li> Contain one or more upper case character </li>
@@ -204,20 +204,20 @@
             <td colsapn="2">
 
                 <div class="form-group">
-				<label for="new_password"><strong>New Password</strong></label>
-                <input type="password" name="new_password" value="" id="new_password" autocomplete="off" class="login_box_input">
+				<!--<label for="new_password"><strong>New Password</strong></label>-->
+                <input type="password" name="new_password" placeholder="New Password" value="" id="new_password" autocomplete="off" class="login_box_input">
                 </div>
 
                 <div class="form-group">
-                <label for="new_password_2"><strong>New Password (again)</strong></label>
+                <!--<label for="new_password_2"><strong>New Password (again)</strong></label>-->
 
-                <input type="password" name="new_password_2" value="" id="new_password_2" autocomplete="off" class="login_box_input">
+                <input type="password" name="new_password_2" placeholder="New Password (again)" value="" id="new_password_2" autocomplete="off" class="login_box_input">
 
                     </div>
                 <div class="form-group2">
 
                 <input   type="hidden" name="mode" value="<?= $mode ?>">
-                <p><input type="submit" value="Reset Password" class="login_button2" style=" font-size: 17px!important; "></p>
+                <p><input type="submit" value="Reset Password" class="login_button2" ></p>
         </div>
 
 			</td>
@@ -234,8 +234,8 @@
 
 
 </div>
-        <div class="container-fluid footer_wrapper">
+        <!--<div class="container-fluid footer_wrapper">
 
             Copyright &copy; 2016-2017 NEXMedical. All rights reserved.
-        </div>
+        </div>-->
 <?php endif; ?>

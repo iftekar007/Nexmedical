@@ -4,7 +4,7 @@
 ?>
 
 <div class="login_box_wrapper">
-    <img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo">
+    <a href="/"><img src="system/themes/nexmedicallogin/images/nex_logo.png" class="nex_logo"></a>
     <h3>Forgotten <span>Password</span></h3>
 <div id="iforget_box" class="loginbox_formwrapper">
 	<form method="post" action="iforget">
@@ -20,8 +20,8 @@
 
         <div class="error ui-state-error ui-corner-all" style=" font-size: 14px;"><span class="ui-icon ui-icon-alert"></span><?php echo $statusLine;?></div>
         <div class="form-group">
-		<label for="username"><strong>Username / E-Mail Address:</strong></label>
-        <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($username);?>" class="login_box_input">
+		<!--<label for="username"><strong>Username / E-Mail Address:</strong></label>-->
+        <input type="text" name="username" id="username" placeholder="Username / E-Mail Address:" value="<?php echo htmlspecialchars($username);?>" class="login_box_input">
 
         </div>
         <input type="submit" name="btnEmail" value="Send Email" id="login_button" class="login_button2" >
@@ -34,7 +34,7 @@
 
 </div>
 
-<div class="container-fluid footer_wrapper">
+<!--<div class="container-fluid footer_wrapper">
 
     Copyright &copy; 2016-2017 NEXMedical. All rights reserved.
-</div>
+</div>-->
