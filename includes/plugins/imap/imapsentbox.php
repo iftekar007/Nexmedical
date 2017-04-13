@@ -92,7 +92,8 @@ try{
 
 $imap->selectFolder('INBOX.Sent');
 $emaillist = $imap->getMessages(true,$perpage,($page-1));
-$overallMessages = $imap->countMessages();
+//$overallMessages = $imap->countMessages();
+$overallMessages = $imap->countUnreadMessages();
 $countMsg = $imap->countMessages();
 
 
@@ -168,13 +169,17 @@ if(isset($_GET['mode'])){
 
 
 $imap->selectFolder('INBOX');
-$emails = $imap->getMessages();
+//$emails = $imap->getMessages();
+$emails = $imap->countUnreadMessages();
 
 $imap->selectFolder('INBOX.Trash');
-$trashcount = $imap->countMessages();
+//$trashcount = $imap->countMessages();
+//$trashcount = $imap->countUnreadMessages();
+$trashcount = '';
 
 $imap->selectFolder('INBOX.Drafts');
-$draftscount = $imap->countMessages();
+//$draftscount = $imap->countMessages();
+$draftscount = $imap->countUnreadMessages();
 
 $totalpage = $countMsg/$perpage;
 
@@ -286,7 +291,7 @@ $AI->skin->css('includes/plugins/imap/style.css');
                             <div class="box-body no-padding collapse navbar-collapse" id="navbar-collapse-1">
                                 <ul class="nav nav-pills nav-stacked">
                                     <li><a href="imapcreate"><span class="glyphicon glyphicon-pencil"></span>Compose</span></a></li>
-                                    <li><a href="/~nexmed/imapinbox"><span class="glyphicon glyphicon-inbox"></span> Inbox <span class="label label-green pull-right"><?php echo count($emails); ?></span></a></li>
+                                    <li><a href="/~nexmed/imapinbox"><span class="glyphicon glyphicon-inbox"></span> Inbox <span class="label label-green pull-right"><?php echo $emails; ?></span></a></li>
                                     <li><a href="/~nexmed/imapdrafts"><span class="glyphicon glyphicon-folder-open"></span> Drafts<span class="label label-red pull-right"><?php echo $draftscount; ?></span></a></li>
                                     <li class="activemail"><a href="/~nexmed/imapsentbox"><span class="glyphicon glyphicon-envelope"></span> Sent Mail <span class="label label-red pull-right"><?php echo $overallMessages; ?></span></a></li>
                                     <li><a href="/~nexmed/imaptrash"><span class="glyphicon glyphicon-trash"></span> Trash<span class="label label-red pull-right"><?php echo $trashcount; ?></span></a></li>

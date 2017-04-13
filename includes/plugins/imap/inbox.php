@@ -103,8 +103,9 @@ try{
 
 $imap->selectFolder('INBOX');
 
-$overallMessages444 = $imap->countMessages();
-$unreadMessages = $imap->countUnreadMessages();
+//$overallMessages444 = $imap->countMessages();
+$overallMessages444 = $imap->countUnreadMessages();
+
 $countMsg = $imap->countMessages();
 $emaillist = $imap->getMessages(true,$perpage,($page-1));
 
@@ -190,14 +191,20 @@ foreach($folders as $folder)
 $imap->selectFolder('INBOX.Sent');
 
 // count messages in current folder
-$overallMessages = $imap->countMessages();
+//$overallMessages = $imap->countMessages();
+$overallMessages = $imap->countUnreadMessages();
+
 
 $imap->selectFolder('INBOX.Trash');
-$trashcount = $imap->countMessages();
+//$trashcount = $imap->countMessages();
+//$trashcount = $imap->countUnreadMessages();
+$trashcount = '';
+
 
 $imap->selectFolder('INBOX.Drafts');
 $draftscount = $imap->countMessages();
-
+//$draftscount = $imap->countMessages();
+$draftscount=$imap->countUnreadMessages();
 $stream=@imap_open("{galaxy.apogeehost.com/novalidate-cert}INBOX", $username, $password);
 
 $totalpage = $countMsg/$perpage;
@@ -436,7 +443,7 @@ $AI->skin->css('includes/plugins/imap/style.css');
                                                 <td class="mailbox-name"  onclick="godetails('<?php echo $email['id'] ; ?>')"><b><?php echo $email['from'] ; ?></b>
                                                 </td>
                                                 <td class="mailbox-subject" onclick="godetails('<?php echo $email['id'] ; ?>')" style="text-align: left;">
-                                                    <div style="height: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 580px;"><strong><?php echo $email['subject'] ; ?></strong>  <?php echo $emailbody; ?></div>
+                                                    <div style="height: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 580px;"><strong><?php echo iconv_mime_decode($email['subject']) ; ?></strong>  <?php echo iconv_mime_decode($emailbody); ?></div>
                                                 </td>
                                                 <td class="mailbox-attachment" onclick="godetails('<?php echo $email['id'] ; ?>')"><?php echo ($isAttach)?'<span class="glyphicon glyphicon-paperclip"></span>':''; ?></td>
                                                 <td class="mailbox-date" onclick="godetails('<?php echo $email['id'] ; ?>')"><?php echo $datestring; ?></td>

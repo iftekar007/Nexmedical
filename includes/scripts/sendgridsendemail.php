@@ -152,6 +152,125 @@ print_r($response);*/
 
 
 
+//$curl = curl_init();
+//
+//curl_setopt_array($curl, array(
+//    CURLOPT_URL => "https://usX.api.mailchimp.com/3.0/lists",
+//    CURLOPT_USER =>'anystring:748053d8916b843dee28535b03ca80ea-us15' ,
+//    CURLOPT_RETURNTRANSFER => true,
+//    CURLOPT_ENCODING => "",
+//    CURLOPT_MAXREDIRS => 10,
+//    CURLOPT_TIMEOUT => 30,
+//    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//    CURLOPT_CUSTOMREQUEST => "POST",
+//    CURLOPT_POSTFIELDS => "{\"name\":\"My Sender I9987D\",\"from\":{\"email\":\"debasiskar007@gmail.com\",\"name\":\"Example INC\"},\"reply_to\":{\"email\":\"debasiskar007@gmail.com\",\"name\":\"Example INC\"},\"address\":\"123 Elm St.\",\"address_2\":\"Apt. 456\",\"city\":\"Denver\",\"state\":\"Colorado\",\"zip\":\"80202\",\"country\":\"United States\"}",
+//    CURLOPT_HTTPHEADER => array(
+//        //"authorization: Bearer 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",
+//        "content-type: application/json"
+//    ),
+//));
+
+
+
+
+$apiKey = '748053d8916b843dee28535b03ca80ea-us15';
+$listID = 'InsertMailChimpListID';
+
+// MailChimp API URL
+//$memberID = md5(strtolower($email));
+$dataCenter = substr($apiKey,strpos($apiKey,'-')+1);
+echo $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/lists/';
+echo $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/lists/d477376151';
+
+echo $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/campaigns/745aaf832f/content';
+echo $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/campaigns/745aaf832f/actions/send';
+echo $url = 'https://' . $dataCenter . '.api.mailchimp.com/3.0/campaigns/';
+
+// member information
+$json = '{"members": [{"email_address": "urist.mcvankab@freddiesjokes.com", "status": "subscribed"}, {"email_address": "urist.mcvankab+1@freddiesjokes.com", "status": "subscribed"}, {"email_address": "urist.mcvankab+2@freddiesjokes.com", "status_if_new": "subscribed"}], "update_existing": true}';
+
+
+$json = '{"recipients":{"list_id":"d477376151"},"type":"regular","settings":{"subject_line":"Your Purchase Receipt","reply_to":"iftekar001@nexmedsolutions.com","from_name":"Customer Service"}}';
+
+//$json = '{"html": "<p>The HTML to use for the saved campaign<./p>"}';
+/*$json = json_encode([
+    'name' => "Freddies Favorite Hats",
+    //'status'        => 'subscribed',
+    'contact'  => [
+        'company'     => 'MailChimp',
+        'address1'     => '675 Ponce De Leon Ave NE',
+        'address2'     => 'Suite 5000',
+        'city'     => 'Atlanta',
+        'state'     => 'GA',
+        'zip'     => '30308',
+        'country'     => 'US',
+        'phone'     => '1234567890',
+        ],
+    "permission_reminder"=>"Youre receiving this email because you signed up for updates about Freddies newest hats.",
+    "campaign_defaults"=>[
+        "from_name"=>"Freddie",
+        "from_email"=>"freddie@freddiehats.com",
+        "subject"=>"",
+        "language"=>"en"],
+    "email_type_option"=>true,
+    "notify_on_subscribe"=> "",
+    "notify_on_unsubscribe"=> "",
+    "visibility"=> "pub"
+
+]);
+
+// send a HTTP POST request with curl
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $apiKey);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+$result = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+print_r($result);
+*/
+
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $apiKey);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+$result = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+print_r($result);
+
+
+exit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -169,6 +288,6 @@ curl_setopt_array($curl, array(
     ),
 ));
 
-$response = curl_exec($curl);
+//$response = curl_exec($curl);
 $err = curl_error($curl);
 print_r($response);

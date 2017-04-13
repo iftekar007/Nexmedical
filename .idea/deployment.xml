@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="Nexmedical">
+  <component name="PublishConfigData" autoUpload="Always" serverName="nexmedical">
     <serverData>
-      <paths name="Nexmedical">
+      <paths name="nexmedical">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
-          <excludedPaths>
-            <excludedPath local="true" path="$PROJECT_DIR$/codehelp" />
-            <excludedPath local="true" path="$PROJECT_DIR$/backbone" />
-            <excludedPath path="/backbone" />
-            <excludedPath path="/codehelp" />
-          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
